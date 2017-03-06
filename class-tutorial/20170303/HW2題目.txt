@@ -1,0 +1,10 @@
+int n;
+scanf(“%d”,&n);
+int ret = fork();
+if(ret == 0){
+	//printf(“pid”);
+	//printf( 1+….+n );	
+}else{
+	//printf(“pid”);
+	//printf( n的所有因數 );
+}
