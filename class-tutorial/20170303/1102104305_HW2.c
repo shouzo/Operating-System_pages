@@ -6,7 +6,7 @@ int main(void) {
 	int n;
 	scanf("%d", &n);
 
-/* Use "fork()" to creat Child's and Parent's process */
+/* Use "fork()" to create Child's and Parent's process */
 	int ret = fork();
 	int result = n;	// Set the "result" initial value
 
