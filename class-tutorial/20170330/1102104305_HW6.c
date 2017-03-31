@@ -16,50 +16,53 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#define MAX 10   /* Numbers to produce */
-#define buf_max 5
+#define MAX 10//000000			/* Numbers to produce */
+#define BUFFER_SIZE 5
 
 pthread_mutex_t the_mutex;
 pthread_cond_t condc, condp;
-int buffer[5];
-int in = 0;
+int buffer[BUFFER_SIZE];
+int in = 0, out = 0;
 
 void *producer(void *ptr) {
-    int i = 0;
+    int i;
 
-    for (i = 1; i <= MAX; i++) {
-        pthread_mutex_lock(&the_mutex);	    /* protect buffer */
-        while (buffer[buf_max - 1] != 0)    /* If there is something in the buffer then wait */
+    for (i = 0; i < MAX; i++) {
+        pthread_mutex_lock(&the_mutex);	/* protect buffer */
+        
+        while (((in + 1) % BUFFER_SIZE) == out)		       /* If there is something in the buffer then wait */
             pthread_cond_wait(&condp, &the_mutex);
-    
-        in++;
+
         buffer[in] = i;
         printf("ProBuffer[%d]：%2d\n", in, buffer[in]);
-        pthread_cond_signal(&condc);	    /* wake up consumer */
-
+        in = (in + 1) % BUFFER_SIZE;
+   
+        pthread_cond_signal(&condc);	/* wake up consumer */
         pthread_mutex_unlock(&the_mutex);	/* release the buffer */
     }
+
     pthread_exit(0);
 }
+
 
 void *consumer(void *ptr) {
-    int i = 0;
+    int i;
 
-    for (i = 1; i <= MAX; i++) {
-        pthread_mutex_lock(&the_mutex);	    /* protect buffer */
-        while (buffer[1] == 0)			    /* If there is nothing in the buffer then wait */
+    for (i = 0; i < MAX; i++) {
+        pthread_mutex_lock(&the_mutex);	/* protect buffer */
+    
+        while (in == out)			/* If there is nothing in the buffer then wait */
             pthread_cond_wait(&condc, &the_mutex);
-        
-        printf("ConBuffer[%d]：%2d\n", in, buffer[in]);
-        buffer[in] = 0;
-        in--;
-        pthread_cond_signal(&condp);	    /* wake up consumer */
-
+    
+        printf("ConBuffer[%d]：%2d\n", out, buffer[out]);
+        out = (out + 1) % BUFFER_SIZE;
+        buffer[out] = 0;
+    
+        pthread_cond_signal(&condp);	/* wake up consumer */
         pthread_mutex_unlock(&the_mutex);	/* release the buffer */
     }
     pthread_exit(0);
 }
-
 
 int main(int argc, char **argv) {
     pthread_t pro, con;

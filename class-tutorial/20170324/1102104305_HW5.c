@@ -23,20 +23,22 @@ pthread_mutex_t the_mutex;
 pthread_cond_t condc, condp;
 int buffer[5];
 int in = 0;
+int count = 0;
 
 void *producer(void *ptr) {
     int i = 0;
 
     for (i = 1; i <= MAX; i++) {
         pthread_mutex_lock(&the_mutex);	    /* protect buffer */
-        while (buffer[buf_max - 1] != 0)    /* If there is something in the buffer then wait */
+        while (count == buf_max)    /* If there is something in the buffer then wait */
             pthread_cond_wait(&condp, &the_mutex);
     
         in++;
         buffer[in] = i;
         printf("ProBuffer[%d]：%2d\n", in, buffer[in]);
-        pthread_cond_signal(&condc);	    /* wake up consumer */
+        count++;
 
+        pthread_cond_signal(&condc);	    /* wake up consumer */
         pthread_mutex_unlock(&the_mutex);	/* release the buffer */
     }
     pthread_exit(0);
@@ -47,12 +49,13 @@ void *consumer(void *ptr) {
 
     for (i = 1; i <= MAX; i++) {
         pthread_mutex_lock(&the_mutex);	    /* protect buffer */
-        while (buffer[1] == 0)			    /* If there is nothing in the buffer then wait */
+        while (count == 0)			    /* If there is nothing in the buffer then wait */
             pthread_cond_wait(&condc, &the_mutex);
         
         printf("ConBuffer[%d]：%2d\n", in, buffer[in]);
         buffer[in] = 0;
         in--;
+        count--;
         pthread_cond_signal(&condp);	    /* wake up consumer */
 
         pthread_mutex_unlock(&the_mutex);	/* release the buffer */

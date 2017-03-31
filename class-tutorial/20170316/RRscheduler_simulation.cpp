@@ -1,7 +1,7 @@
 #define TIMESLICE	1
 #define PROCESS_NO	4
 int remaintime[PROCESS_NO] = {6, 3, 1, 7};
-int turnaoundtime[PROCESS_NO];
+int turnaroundtime[PROCESS_NO];
 int clock = 0; // global time clock
 
 int scheduler(void)
@@ -11,7 +11,7 @@ int scheduler(void)
     // if no ready process (i.e., all the processes are finished), then return -1;
 }
 
-int main()
+int main(void)
 {
 
 //1. call scheduler() to get the pid of a process,
