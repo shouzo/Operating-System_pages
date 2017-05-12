@@ -1,0 +1,12 @@
+#!/bin/sh
+
+myvar="Hi there"
+
+echo $myvar
+echo "$myvar"
+echo '$myvar'
+echo \$myvar
+
+echo "Please enter something..."
+read myvar
+echo $myvar

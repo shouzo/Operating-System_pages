@@ -1,0 +1,10 @@
+#!/bin/sh
+
+salutation=Hello
+echo $salutation
+
+salutation="Yes Dear"
+echo $salutation
+
+salutation=7+5
+echo $salutation

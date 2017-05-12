@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "Is it morning? Please enter 'yes' or 'no'"
+read timeofday
+
+if [ $timeofday = "yes" ]
+    then
+        echo "Good morning"
+
+elif [ "$timeofday" = "no" ]; then
+    echo "Good afternoon"
+
+else
+    echo "Sorry, not recognized"
+fi

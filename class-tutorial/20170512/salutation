@@ -1,0 +1,6 @@
+#!/bin/sh
+
+salutation=7+5
+
+echo "Show salutation"
+echo $salutation
