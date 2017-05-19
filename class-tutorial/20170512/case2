@@ -1,0 +1,9 @@
+#!/bin/sh
+echo "Is it morning? Please answer 'Yes'、'Y...'、'y'、'No'、'N...'、'n'"
+read timeofday
+
+case "$timeofday" in
+    Y* | y | Yes) echo "Good Morning" ;;
+    N* | n | No) echo "Good Aftrenoon" ;;
+    *) echo "Sorry, answer not recognized" ;;
+esac
