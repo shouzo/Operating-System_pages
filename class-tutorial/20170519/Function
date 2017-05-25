@@ -1,0 +1,10 @@
+#!/bin/sh
+
+foo() {
+        echo "Function foo is excuting"
+
+}
+
+echo "Script starting"
+foo
+echo "Script ending"
